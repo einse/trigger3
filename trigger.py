@@ -7,6 +7,18 @@ tags = [u'-мкрк', u'-диз', u'мкрк-', u'диз-']
 count_of_target_files_in_folder = 0
 folders_collection = {}
 current_folder_number = 0
+
+current_time__unix = time.localtime()
+current_time__human_cn\
+    = time.strftime(u'%Y-%m-%d_%H-%M-%S', current_time__unix)
+index_root = u'trigger-index'
+folders_index_path\
+    = u'./' + index_root + u'/'\
+    + current_time__human_cn + u'_folders-index.txt'
+files_index_path\
+    = u'./' + index_root + u'/'\
+    + current_time__human_cn + u'_files-index.txt'
+
 for current_folder, folders, files in os.walk(start_path):    
     count_of_target_files_in_folder = 0
     current_folder_number = current_folder_number + 1
@@ -27,6 +39,17 @@ for current_folder, folders, files in os.walk(start_path):
                         = date_of_the_first_target_file_in_folder__human_cn\
                         + u'-f'\
                         + str(current_folder_number)
+                with codecs.open(files_index_path, 'a', encoding='utf-8') as f:
+                    target_file_id = target_folder_id + u'-ff'\
+                        + str(count_of_target_files_in_folder)
+                    files_index_string = u'{}\t{}\t{}'\
+                        .format\
+                        ( target_folder_id\
+                        , target_file_id\
+                        , current_file\
+                        )
+                    f.write(files_index_string)
+                    f.write(u'\n')
                 break
         continue # searching files
     if count_of_target_files_in_folder > 0:
@@ -34,13 +57,6 @@ for current_folder, folders, files in os.walk(start_path):
             = [len(files)\
             , count_of_target_files_in_folder\
             , current_folder]
-current_time__unix = time.localtime()
-current_time__human_cn\
-    = time.strftime(u'%Y-%m-%d_%H-%M-%S', current_time__unix)
-index_root = u'trigger-index'
-folders_index_path\
-    = u'./' + index_root + u'/'\
-    + current_time__human_cn + u'_folders-index.txt'
 with codecs.open(folders_index_path, 'a', encoding='utf-8') as f:
     for i, id_ in enumerate(folders_collection):
         folders_index_string = u'{}\t{}\t{}\t{}'\
